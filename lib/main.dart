@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dar/Welcome_Screen.dart';
 import 'Main_screen.dart';
+
 void main() => runApp(Dar());
 
 class Dar extends StatelessWidget {
@@ -10,7 +11,7 @@ class Dar extends StatelessWidget {
         initialRoute: WelcomeScreen.id,
         routes: {
           WelcomeScreen.id: (context) => WelcomeScreen(),
-//          LoginScreen.id : (context) => LoginScreen(),
+          MainsScreen.id : (context) => MainsScreen(),
 //          ChatScreen.id :(context) => ChatScreen(),
 //          RegistrationScreen.id : (context) => RegistrationScreen(),
         }
