@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "544702502240",
+    "firebase_url": "https://darr-8c9df.firebaseio.com",
+    "project_id": "darr-8c9df",
+    "storage_bucket": "darr-8c9df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544702502240:android:ecd921af15a481c1",
+        "android_client_info": {
+          "package_name": "com.kassemabboud.dar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "544702502240-gasiuv6mm2opnvub6arqeel4gn96j9ms.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe4FaXlFRsUigm3lAdkg8ZUlrB4nXWyZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "544702502240-gasiuv6mm2opnvub6arqeel4gn96j9ms.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
