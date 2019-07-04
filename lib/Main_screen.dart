@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dar/Welcome_Screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Books_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 final _firestore = Firestore.instance;
 String SCategori;
@@ -43,46 +44,30 @@ class CardCat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void getdata(String selectedCategorie) async {
-      final messages = await _firestore
-          .collection('books')
-          .where('cat', isEqualTo: selectedCategorie)
-          .getDocuments();
-      for (var message in messages.documents) {
-        final title = message.data['title'].toString();
-        final imagename = message.data['imagename'].toString();
+    return MaterialButton(
 
-        MainsScreen.book.add({'cat': title, 'imagelink': imagename});
-        print(MainsScreen.book);
-      }
-    }
-    return Card(
-      child: MaterialButton(
-        onPressed: (){
-          getdata(cat);
-          Navigator.pushNamed(context, BooksScreen.id);
-        },
-        child: InkWell(
-          onTap: () {
+      onPressed: () async{
+        MainsScreen.book.clear();
+        final messages = await _firestore
+            .collection('books')
+            .where('cat', isEqualTo: cat)
+            .getDocuments();
+        for (var message in messages.documents) {
+          final title = message.data['title'].toString();
+          final imagename = message.data['imagename'].toString();
 
-          },
-          child: GridTile(
-            child: Image.network(imagelink),
-            footer: Container(
-              child: ListTile(
-                leading: Center(
-                  child: Text(
-                    cat,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
+          MainsScreen.book.add({'cat': title, 'imagelink': imagename});
+
+        }
+
+        Navigator.pushNamed(context, BooksScreen.id);
+      },
+
+      child: Column(
+          children: <Widget>[
+            Image.network(imagelink,fit: BoxFit.fill,),
+            Text(cat),
+          ],
       ),
     );
   }
@@ -92,14 +77,17 @@ class products extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(WelcomeScreen.nnn.length);
-    return GridView.builder(
-      itemCount: WelcomeScreen.nnn.length,
-      gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-      itemBuilder: (BuildContext context, int index) {
-        return CardCat(WelcomeScreen.nnn[index]['cat'],
-            WelcomeScreen.nnn[index]['imagelink']);
-      },
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GridView.builder(
+        itemCount: WelcomeScreen.nnn.length,
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        itemBuilder: (BuildContext context, int index) {
+          return CardCat(WelcomeScreen.nnn[index]['cat'],
+              WelcomeScreen.nnn[index]['imagelink']);
+        },
+      ),
     );
   }
 }
