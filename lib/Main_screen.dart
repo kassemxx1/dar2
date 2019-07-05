@@ -45,8 +45,7 @@ class CardCat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-
-      onPressed: () async{
+      onPressed: () async {
         MainsScreen.book.clear();
         final messages = await _firestore
             .collection('books')
@@ -55,23 +54,28 @@ class CardCat extends StatelessWidget {
         for (var message in messages.documents) {
           final title = message.data['title'].toString();
           final imagename = message.data['imagename'].toString();
+          final price = message.data['price'].toString();
+          final detail = message.data['detail'].toString();
 
-          MainsScreen.book.add({'cat': title, 'imagelink': imagename});
-
+          MainsScreen.book.add({
+            'cat': title,
+            'imagelink': imagename,
+            'price': price,
+            'detail': detail
+          });
         }
 
         Navigator.pushNamed(context, BooksScreen.id);
       },
-
       child: Column(
-          children: <Widget>[
-            new CachedNetworkImage(
-              imageUrl: imagelink,
+        children: <Widget>[
+          new CachedNetworkImage(
+            imageUrl: imagelink,
 //              placeholder: new CircularProgressIndicator(),
 //              errorWidget: new Icon(Icons.error),
-            ),
-            Text(cat),
-          ],
+          ),
+          Text(cat),
+        ],
       ),
     );
   }

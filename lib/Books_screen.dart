@@ -6,7 +6,6 @@ class BooksScreen extends StatefulWidget {
   @override
   _BooksScreenState createState() => _BooksScreenState();
 }
-
 class _BooksScreenState extends State<BooksScreen> {
   @override
   void initState() {
@@ -16,10 +15,19 @@ class _BooksScreenState extends State<BooksScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        BooksWidgets(),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(
+          child: Text(
+            'Dar',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      body: BooksWidgets(),
     );
   }
 }
@@ -32,31 +40,30 @@ class BooksWidgets extends StatelessWidget {
       child: GridView.builder(
         itemCount: MainsScreen.book.length,
         gridDelegate:
-        SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
-          return CardBooks(MainsScreen.book[index]['cat'],
-              MainsScreen.book[index]['imagelink']);
+          return CardBooks(
+              MainsScreen.book[index]['cat'],
+              MainsScreen.book[index]['imagelink'],
+              MainsScreen.book[index]['price']);
         },
       ),
     );
   }
 }
 class CardBooks extends StatelessWidget {
-  CardBooks(
-      this.cat,
+  CardBooks(this.cat,
       this.imagelink,
-      );
+      this.price,);
+
   final String cat;
   final String imagelink;
+  final String price;
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-
-      onPressed: () async{
-
-      },
-
+      onPressed: () async {},
       child: Column(
         children: <Widget>[
           new CachedNetworkImage(
@@ -64,7 +71,29 @@ class CardBooks extends StatelessWidget {
 //              placeholder: new CircularProgressIndicator(),
 //              errorWidget: new Icon(Icons.error),
           ),
-          Text(cat),
+          Center(
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text('$cat  '),
+                ),
+                SizedBox(
+                  width: 20.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 1.0),
+                  child: Text(
+                    '$price\$',
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                      color: Colors.green,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
