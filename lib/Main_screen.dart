@@ -65,7 +65,11 @@ class CardCat extends StatelessWidget {
 
       child: Column(
           children: <Widget>[
-            Image.network(imagelink,fit: BoxFit.fill,),
+            new CachedNetworkImage(
+              imageUrl: imagelink,
+//              placeholder: new CircularProgressIndicator(),
+//              errorWidget: new Icon(Icons.error),
+            ),
             Text(cat),
           ],
       ),
