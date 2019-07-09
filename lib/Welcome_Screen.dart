@@ -4,7 +4,7 @@ import 'package:dar/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'Main_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:animated_text_kit/animated_text_kit.dart';
 final _firestore = Firestore.instance;
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
@@ -46,6 +46,29 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    child: Image.asset('images/b.png'),
+                    height: 60.0,
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  TypewriterAnimatedTextKit(
+                      text : ['دار النشر'],
+                      textStyle: TextStyle(
+                        fontSize: 45.0,
+
+                      ),
+                      textAlign: TextAlign.right
+
+
+
+                  ),
+                ],
+              ),
               Container(),
               SizedBox(
                 height: 48.0,

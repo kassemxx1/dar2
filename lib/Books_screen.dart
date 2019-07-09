@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'Main_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:expandable_card/expandable_card.dart';
+import 'package:dar/Swiper_Screen.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 class BooksScreen extends StatefulWidget {
   static const String id = 'Books_Screen';
   @override
@@ -27,7 +30,19 @@ class _BooksScreenState extends State<BooksScreen> {
           ),
         ),
       ),
-      body: BooksWidgets(),
+
+      body:  ExpandableCardPage(
+        page: Center(
+          child: BooksWidgets(),
+        ),
+        expandableCard: ExpandableCard(
+          children: <Widget>[Text("Hello world")],
+          minHeight: 150.0,
+          maxHeight: 300.0,
+          hasRoundedCorners:true ,
+
+        ),
+      ),
     );
   }
 }
@@ -63,7 +78,15 @@ class CardBooks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      onPressed: () async {},
+      onPressed: ()  {
+        print('kassem');
+
+     //  Navigator.pushNamed(context, carddd.id);
+        Navigator.of(context).push(
+            TransparentRoute(builder: (BuildContext context) => ddd())
+        );
+      },
+
       child: Column(
         children: <Widget>[
           new CachedNetworkImage(
@@ -95,6 +118,65 @@ class CardBooks extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class ddd extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Swiper(itemCount: 1,
+      itemBuilder: (BuildContext context ,int ){
+        return Container(
+          child: new Image.network(
+            "http://via.placeholder.com/288x188",
+            fit: BoxFit.fill,
+            gaplessPlayback: false,
+          ),
+        );
+      },
+      viewportFraction: 0.8,
+      scale: 0.8,
+
+
+    );
+  }
+}
+class TransparentRoute extends PageRoute<void> {
+  TransparentRoute({
+    @required this.builder,
+    RouteSettings settings,
+  })  : assert(builder != null),
+        super(settings: settings, fullscreenDialog: false);
+
+  final WidgetBuilder builder;
+
+  @override
+  bool get opaque => false;
+
+  @override
+  Color get barrierColor => null;
+
+  @override
+  String get barrierLabel => null;
+
+  @override
+  bool get maintainState => true;
+
+  @override
+  Duration get transitionDuration => Duration(milliseconds: 350);
+
+  @override
+  Widget buildPage(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation) {
+    final result = builder(context);
+    return FadeTransition(
+      opacity: Tween<double>(begin: 0, end: 1).animate(animation),
+      child: Semantics(
+        scopesRoute: true,
+        explicitChildNodes: true,
+        child: result,
       ),
     );
   }
