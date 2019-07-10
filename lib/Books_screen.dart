@@ -4,15 +4,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_card/expandable_card.dart';
 import 'package:dar/Swiper_Screen.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+
 String imagelinkk;
 int indexx;
+String Pricee;
+
 ScrollController controller;
 Route route = MaterialPageRoute(builder: (context) => BooksScreen());
+
 class BooksScreen extends StatefulWidget {
   static const String id = 'Books_Screen';
   @override
   _BooksScreenState createState() => _BooksScreenState();
 }
+
 class _BooksScreenState extends State<BooksScreen> {
   @override
   void initState() {
@@ -20,6 +25,7 @@ class _BooksScreenState extends State<BooksScreen> {
     super.initState();
     print(MainsScreen.book);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,8 +40,7 @@ class _BooksScreenState extends State<BooksScreen> {
           ),
         ),
       ),
-
-      body:  ExpandableCardPage(
+      body: ExpandableCardPage(
         page: Center(
           child: BooksWidgets(),
         ),
@@ -43,13 +48,13 @@ class _BooksScreenState extends State<BooksScreen> {
           children: <Widget>[Text("Hello world")],
           minHeight: 150.0,
           maxHeight: 300.0,
-          hasRoundedCorners:true ,
-
+          hasRoundedCorners: true,
         ),
       ),
     );
   }
 }
+
 //GGGGGRRRRRRRRRRRIIIIIIIIIIIIIDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
 class BooksWidgets extends StatelessWidget {
   @override
@@ -62,11 +67,17 @@ class BooksWidgets extends StatelessWidget {
         gridDelegate:
             SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
-          return CardBooks(
-              MainsScreen.book[index]['cat'],
-              MainsScreen.book[index]['imagelink'],
-              MainsScreen.book[index]['price'],index
-        );
+          return MaterialButton(
+            child: CardBooks(
+                MainsScreen.book[index]['cat'],
+                MainsScreen.book[index]['imagelink'],
+                MainsScreen.book[index]['price'],
+                ),
+            onPressed: (){
+
+              Navigator.of(context)
+              .push(TransparentRoute(builder: (BuildContext context) => ddd(index)));}
+          );
 
         },
 
@@ -75,119 +86,107 @@ class BooksWidgets extends StatelessWidget {
   }
 }
 
-
-
 //WIIIIDDDDDDGGGGEEETTTTT  GGGRRRIIIDDDDDD
 class CardBooks extends StatelessWidget {
-  CardBooks(this.cat,
-      this.imagelink,
-      this.price,this.i);
+  CardBooks(this.cat, this.imagelink, this.price,);
 
   final String cat;
   final String imagelink;
   final String price;
-  final int i;
+
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      onPressed: ()  {
-        print('kassem');
-        imagelinkk=imagelink;
-        indexx=i;
-     //  Navigator.pushNamed(context, carddd.id);
-        Navigator.of(context).push(
-            TransparentRoute(builder: (BuildContext context) => ddd())
-        );
-      },
-
-      child: Column(
-        children: <Widget>[
-          new CachedNetworkImage(
-            imageUrl: imagelink,
+    return Column(
+      children: <Widget>[
+        new CachedNetworkImage(
+          imageUrl: imagelink,
 //              placeholder: new CircularProgressIndicator(),
 //              errorWidget: new Icon(Icons.error),
-          ),
-          Center(
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: Text('$cat  '),
-                ),
-                SizedBox(
-                  width: 20.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 1.0),
-                  child: Text(
-                    '$price\$',
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                      color: Colors.green,
-                    ),
+        ),
+        Center(
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: Text('$cat  '),
+              ),
+              SizedBox(
+                width: 20.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 1.0),
+                child: Text(
+                  '$price\$',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    color: Colors.green,
                   ),
                 ),
-              ],
-            ),
-          )
-        ],
-      ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 }
 
-
-
-
 //SSSSSSSSSSWWWWWWWWWWIIIIIIIIIIIIIIIIIPPPPPPPPPPPEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRRRR
 class ddd extends StatelessWidget {
-
+  ddd(this.kkk);
+  final int kkk;
   @override
   Widget build(BuildContext context) {
-    return Swiper(itemCount: MainsScreen.book.length,
-      itemBuilder: (BuildContext context ,int i ){
-
+    return Swiper(
+      itemCount: MainsScreen.book.length,
+      itemBuilder: (BuildContext context,  lll) {
+       var ccc = kkk + lll;
+       if(ccc > MainsScreen.book.length-1){
+        var aaa = ccc - MainsScreen.book.length;
+          ccc = aaa;
+       }
         return SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Text('kassem'),
+
               Stack(
                 children: <Widget>[
-                 Column(
-                  children: <Widget>[
-                    GestureDetector(
-                      child: SizedBox(
-                        height: 50.0,
+                  Column(
+                    children: <Widget>[
+                      GestureDetector(
+                        child: SizedBox(
+                          height: 50.0,
+                        ),
                       ),
-                    ),
-                    new Image.network(
-                      MainsScreen.book[i]['imagelink'],
-                      fit: BoxFit.fill,
-                      gaplessPlayback: false,
-                    ),
-                    new Image.network(
-                      imagelinkk,
-                      fit: BoxFit.fill,
-                      gaplessPlayback: false,
-                    ),
-                    new Image.network(
-                      imagelinkk,
-                      fit: BoxFit.fill,
-                      gaplessPlayback: false,
-                    ),
-                    new Image.network(
-                      imagelinkk,
-                      fit: BoxFit.fill,
-                      gaplessPlayback: false,
-                    ),
-                    new Image.network(
-                      imagelinkk,
-                      fit: BoxFit.fill,
-                      gaplessPlayback: false,
-                    ),
-                  ],
+                      new CachedNetworkImage(
+                        imageUrl: MainsScreen.book[ccc]['imagelink'],
+//              placeholder: new CircularProgressIndicator(),
+//              errorWidget: new Icon(Icons.error),
+                        fit: BoxFit.fill,
 
-                ),
+                      ),
+//                      new Image.network(
+//                        imagelinkk,
+//                        fit: BoxFit.fill,
+//                        gaplessPlayback: false,
+//                      ),
+//                      new Image.network(
+//                        imagelinkk,
+//                        fit: BoxFit.fill,
+//                        gaplessPlayback: false,
+//                      ),
+//                      new Image.network(
+//                        imagelinkk,
+//                        fit: BoxFit.fill,
+//                        gaplessPlayback: false,
+//                      ),
+//                      new Image.network(
+//                        imagelinkk,
+//                        fit: BoxFit.fill,
+//                        gaplessPlayback: false,
+//                      ),
+                    ],
+                  ),
                 ],
               ),
             ],
@@ -196,15 +195,10 @@ class ddd extends StatelessWidget {
       },
       viewportFraction: 0.8,
       scale: 0.8,
-      loop: false,
-
-
+      loop: true,
     );
   }
 }
-
-
-
 
 //Transparent==================================================
 class TransparentRoute extends PageRoute<void> {
