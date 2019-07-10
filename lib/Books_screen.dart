@@ -4,6 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_card/expandable_card.dart';
 import 'package:dar/Swiper_Screen.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+String imagelinkk;
+int indexx;
+ScrollController controller;
+Route route = MaterialPageRoute(builder: (context) => BooksScreen());
 class BooksScreen extends StatefulWidget {
   static const String id = 'Books_Screen';
   @override
@@ -46,6 +50,7 @@ class _BooksScreenState extends State<BooksScreen> {
     );
   }
 }
+//GGGGGRRRRRRRRRRRIIIIIIIIIIIIIDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
 class BooksWidgets extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -60,27 +65,35 @@ class BooksWidgets extends StatelessWidget {
           return CardBooks(
               MainsScreen.book[index]['cat'],
               MainsScreen.book[index]['imagelink'],
-              MainsScreen.book[index]['price']);
+              MainsScreen.book[index]['price'],index
+        );
+
         },
+
       ),
     );
   }
 }
+
+
+
+//WIIIIDDDDDDGGGGEEETTTTT  GGGRRRIIIDDDDDD
 class CardBooks extends StatelessWidget {
   CardBooks(this.cat,
       this.imagelink,
-      this.price,);
+      this.price,this.i);
 
   final String cat;
   final String imagelink;
   final String price;
-
+  final int i;
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: ()  {
         print('kassem');
-
+        imagelinkk=imagelink;
+        indexx=i;
      //  Navigator.pushNamed(context, carddd.id);
         Navigator.of(context).push(
             TransparentRoute(builder: (BuildContext context) => ddd())
@@ -123,26 +136,77 @@ class CardBooks extends StatelessWidget {
   }
 }
 
+
+
+
+//SSSSSSSSSSWWWWWWWWWWIIIIIIIIIIIIIIIIIPPPPPPPPPPPEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRRRR
 class ddd extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    return Swiper(itemCount: 1,
-      itemBuilder: (BuildContext context ,int ){
-        return Container(
-          child: new Image.network(
-            "http://via.placeholder.com/288x188",
-            fit: BoxFit.fill,
-            gaplessPlayback: false,
+    return Swiper(itemCount: MainsScreen.book.length,
+      itemBuilder: (BuildContext context ,int i ){
+
+        return SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Text('kassem'),
+              Stack(
+                children: <Widget>[
+                 Column(
+                  children: <Widget>[
+                    GestureDetector(
+                      child: SizedBox(
+                        height: 50.0,
+                      ),
+                    ),
+                    new Image.network(
+                      MainsScreen.book[i]['imagelink'],
+                      fit: BoxFit.fill,
+                      gaplessPlayback: false,
+                    ),
+                    new Image.network(
+                      imagelinkk,
+                      fit: BoxFit.fill,
+                      gaplessPlayback: false,
+                    ),
+                    new Image.network(
+                      imagelinkk,
+                      fit: BoxFit.fill,
+                      gaplessPlayback: false,
+                    ),
+                    new Image.network(
+                      imagelinkk,
+                      fit: BoxFit.fill,
+                      gaplessPlayback: false,
+                    ),
+                    new Image.network(
+                      imagelinkk,
+                      fit: BoxFit.fill,
+                      gaplessPlayback: false,
+                    ),
+                  ],
+
+                ),
+                ],
+              ),
+            ],
           ),
         );
       },
       viewportFraction: 0.8,
       scale: 0.8,
+      loop: false,
 
 
     );
   }
 }
+
+
+
+
+//Transparent==================================================
 class TransparentRoute extends PageRoute<void> {
   TransparentRoute({
     @required this.builder,
