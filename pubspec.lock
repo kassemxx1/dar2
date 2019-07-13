@@ -172,6 +172,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.0"
+  progress_indicator_button:
+    dependency: "direct main"
+    description:
+      name: progress_indicator_button
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   quiver:
     dependency: transitive
     description:
