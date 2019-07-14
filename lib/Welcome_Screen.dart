@@ -100,16 +100,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 colour: Colors.blueAccent,
                 title: 'LogIn',
                 onPressed: () async {
-//                  try {
-//                    final user = await _auth.signInWithEmailAndPassword(
-//                        email: email, password: password);
-//                    if (user != null) {
-//                      Navigator.pushNamed(context, MainsScreen.id);
-//                    }
-//                  } catch (e) {
-//                    print(e);
-//                  }
-                  Navigator.pushNamed(context, MainsScreen.id);
+                  try {
+                    final user = await _auth.signInWithEmailAndPassword(
+                        email: email, password: password);
+                    if (user != null) {
+                      Navigator.pushNamed(context, MainsScreen.id);
+                    }
+                  } catch (e) {
+                    print(e);
+                  }
+//                  Navigator.pushNamed(context, MainsScreen.id);
                 },
               )
             ],
