@@ -161,101 +161,21 @@ class ddd extends StatelessWidget {
       data: Theme.of(context).copyWith(
       canvasColor: Colors.transparent,
     ),
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Container(
-          color: Colors.white,
-          child: Swiper(
-            itemCount: MainsScreen.book.length,
-            itemBuilder: (BuildContext context, lll) {
-              var ccc = kkk + lll;
-              if (ccc > MainsScreen.book.length - 1) {
-                var aaa = ccc - MainsScreen.book.length;
-                ccc = aaa;
-              }
-              return CustomScrollView(
-                dragStartBehavior: dragStartBehavior,
-                slivers: <Widget>[
-                  SliverAppBar(
-                    expandedHeight: 300,
-                    floating: true,
-                    pinned: true,
-                    flexibleSpace: new FlexibleSpaceBar(
-                      background: Stack(
-                        children: <Widget>[
-                          CachedNetworkImage(
-                            imageUrl: MainsScreen.book[ccc]['imagelink'],
-                            fit: BoxFit.fill,
-                          ),
-                        ],
-                      ),
-                      title: Row(
-                        children: <Widget>[
-                          Text(
-                            MainsScreen.book[ccc]['title'],
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 40.0),
-                            textDirection: TextDirection.rtl,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SliverFixedExtentList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        Material(
-                          child: Text(
-                            MainsScreen.book[ccc]['detail'],
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20.0,
-                            ),
-                            textDirection: TextDirection.rtl,
-                          ),
-                        ),
-                      ],
-                    ),
-                    itemExtent: 600,
-                  ),
-                  SliverFixedExtentList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        Container(
-                          width: 200,
-                          height: 60,
-                          child: ProgressButton(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            child: Text(
-                              "Add to Car",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                              ),
-                            ),
-                            onPressed: (controller) {
-                              controller.forward();
-                              final _firestore = Firestore.instance;
-                              _firestore.collection('cart').add({
-                                'email': me,
-                                'title': MainsScreen.book[ccc]['title'],
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    itemExtent: 60,
-                  ),
-                ],
-              );
-            },
-            viewportFraction: scalee,
-            scale: scalee,
-            loop: true,
-          ),
+      child: Container(
+        color: Colors.white,
+        child: Swiper(
+          itemCount: MainsScreen.book.length,
+          itemBuilder: (BuildContext context, lll) {
+            var ccc = kkk + lll;
+            if (ccc > MainsScreen.book.length - 1) {
+              var aaa = ccc - MainsScreen.book.length;
+              ccc = aaa;
+            }
+            return searchable(ccc);
+          },
+          viewportFraction: 1,
+          scale: 1,
+          loop: true,
         ),
       ),
     );
@@ -301,3 +221,5 @@ class TransparentRoute extends PageRoute<void> {
     );
   }
 }
+
+

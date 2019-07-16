@@ -3,19 +3,17 @@ import 'package:dar/Welcome_Screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Books_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:material_search/material_search.dart';
-import 'package:progress_indicator_button/progress_button.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'AnimatedButton.dart';
 
 final _firestore = Firestore.instance;
 String SCategori;
-var allbook =[];
-List<String> SearchBook =[];
-var i =0;
+var allbook = [];
+List<String> SearchBook = [];
+var i = 0;
 String _selected;
+
 class MainsScreen extends StatefulWidget {
   static const String id = 'Main_Screen';
   static final book = [];
@@ -25,35 +23,37 @@ class MainsScreen extends StatefulWidget {
 }
 
 class _MainsScreenState extends State<MainsScreen> {
-  void getallBook() async{
+  //RETRIEVE ALL BOOK FROM FIREBAS
+  void getallBook() async {
     allbook.clear();
     SearchBook.clear();
-    final messages = await _firestore
-        .collection('books')
-        .getDocuments();
+    final messages = await _firestore.collection('books').getDocuments();
     for (var message in messages.documents) {
       final title = message.data['title'].toString();
       final imagename = message.data['imagename'].toString();
       final price = message.data['price'].toString();
       final detail = message.data['detail'].toString();
+      final writer = message.data['writer'].toString();
 
       allbook.add({
         'title': title,
         'imagelink': imagename,
         'price': price,
-        'detail': detail
+        'detail': detail,
+        'writer':writer,
       });
       SearchBook.add(title);
-
     }
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    i=0;
+    i = 0;
     getallBook();
   }
+//SCAFOLD
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,34 +68,27 @@ class _MainsScreenState extends State<MainsScreen> {
             ),
           ),
         ),
-
       ),
       body: products(),
-
-
-
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Colors.blueAccent,
         height: 50.0,
         color: Colors.white,
         items: <Widget>[
           Column(
-            children: <Widget>[
-              Icon(Icons.book, size: 30),
-              Text('Main')
-            ],
+            children: <Widget>[Icon(Icons.book, size: 30), Text('Main')],
           ),
           Column(
-            children: <Widget>[
-              Icon(Icons.search, size: 30),
-              Text('Search')
-            ],
+            children: <Widget>[Icon(Icons.search, size: 30), Text('Search')],
           ),
-          Icon(Icons.compare_arrows, size: 30),
+          Column(
+            children: <Widget>[ Icon(Icons.shopping_cart, size: 30),Text('Cart')],
+
+          ),
         ],
         onTap: (index) {
           setState(() {
-            i=index;
+            i = index;
           });
 
           //Handle button tap
@@ -104,7 +97,7 @@ class _MainsScreenState extends State<MainsScreen> {
     );
   }
 }
-
+//CARDCAT WITH RETRIEVE CATEGORIES
 class CardCat extends StatelessWidget {
   CardCat(
     this.cat,
@@ -151,10 +144,10 @@ class CardCat extends StatelessWidget {
     );
   }
 }
-
+//PRODUCTS
 class products extends StatelessWidget {
-  Widget addAppBar(int k){
-    if (k==0){
+  Widget addAppBar(int k) {
+    if (k == 0) {
       return AppBar(
         automaticallyImplyLeading: false,
         title: Center(
@@ -166,11 +159,10 @@ class products extends StatelessWidget {
             ),
           ),
         ),
-
       );
-
-    };
-    if(k==1){
+    }
+    ;
+    if (k == 1) {
       AppBar(
         automaticallyImplyLeading: false,
         title: Center(
@@ -182,20 +174,19 @@ class products extends StatelessWidget {
             ),
           ),
         ),
-
       );
-
     }
   }
+
   @override
   Widget build(BuildContext context) {
-    if(i==0) {
+    if (i == 0) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: GridView.builder(
           itemCount: WelcomeScreen.nnn.length,
           gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
           itemBuilder: (BuildContext context, int index) {
             return CardCat(WelcomeScreen.nnn[index]['cat'],
                 WelcomeScreen.nnn[index]['imagelink']);
@@ -203,38 +194,37 @@ class products extends StatelessWidget {
         ),
       );
     }
-    if (i==1){
+    if (i == 1) {
       return MaterialSearchInput<String>(
+
         placeholder: 'Search',
-        onSelect: (String selected){
+        onSelect: (String selected) {
           if (selected == null) {
             //user closed the MaterialSearch without selecting any value
 
-          }
-          _selected=selected;
-          print(_selected);
-          for(int i = 0 ; i < allbook.length;i++){
-           var j = allbook[i]['title'];
-           if(j == _selected){
-             Navigator.of(context).push(TransparentRoute(
-                 builder: (BuildContext context) => searchable(i)));
 
-           }
+          }
+          _selected = selected;
+          for (int i = 0; i < allbook.length; i++) {
+            var j = allbook[i]['title'];
+            if (j == _selected) {
+              Navigator.of(context).push(TransparentRoute(
+                  builder: (BuildContext context) => searchable(i)));
+            }
           }
         },
         results: SearchBook.map((name) => new MaterialSearchResult<String>(
-          value: name, //The value must be of type <String>
-          text: name, //String that will be show in the list
-          icon: Icons.book,
-        )).toList(),
 
+              value: name, //The value must be of type <String>
+              text: name, //String that will be show in the list
+
+              icon: Icons.book,
+            )).toList(),
       );
-
-
     }
   }
 }
-
+//SEARCHABLE
 class searchable extends StatelessWidget {
   int ind;
   searchable(this.ind);
@@ -242,7 +232,6 @@ class searchable extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: CustomScrollView(
-
         slivers: <Widget>[
           SliverAppBar(
             expandedHeight: 300,
@@ -257,19 +246,52 @@ class searchable extends StatelessWidget {
                   ),
                 ],
               ),
-              title: Row(
-                children: <Widget>[
-                  Text(
-                    allbook[ind]['title'],
+              title: Text(
+                allbook[ind]['title'],
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40.0),
+                textDirection: TextDirection.rtl,
+              ),
+              titlePadding: EdgeInsets.only(bottom: 5),
+            ),
+          ),
+          SliverFixedExtentList(
+            delegate: SliverChildListDelegate(
+              [
+                Material(
+                  child: Text('  US \$ ${allbook[ind]['price']}',
+
                     style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 40.0),
+                      color: Colors.green,
+                      fontSize: 40.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textDirection: TextDirection.ltr,
+                  ),
+                ),
+              ],
+            ),
+            itemExtent: 50,
+          ),
+          SliverFixedExtentList(
+            delegate: SliverChildListDelegate(
+              [
+                Material(
+                  child: Text(allbook[ind]['writer'],
+
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 40.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                     textDirection: TextDirection.rtl,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+            itemExtent: 50,
           ),
           SliverFixedExtentList(
             delegate: SliverChildListDelegate(
@@ -291,43 +313,41 @@ class searchable extends StatelessWidget {
           SliverFixedExtentList(
             delegate: SliverChildListDelegate(
               [
-                Center(
+                Padding(
+                  padding: const EdgeInsets.all(0.0),
                   child: Container(
-                    padding: EdgeInsets.all(0),
+
                     color: Colors.white,
-                    child: AnimatedButton(
-                      initialText: 'Add To Cart',
-                      finalText: 'Added',
-
-                      buttonStyle: ButtonStyle(
-                        primaryColor: Colors.blue,
-                        secondaryColor: Colors.grey,
-                        elevation: 20.0,
-                        initialTextStyle: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.black,
-
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 40.0,right: 40.0),
+                      child: AnimatedButton(
+                        initialText: 'Add To Cart',
+                        finalText: 'Added',
+                        buttonStyle: ButtonStyle(
+                            primaryColor: Colors.blue,
+                            secondaryColor: Colors.grey,
+                            elevation: 20.0,
+                            initialTextStyle: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.black,
+                            ),
+                            finalTextStyle: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.black,
+                            ),
+                            borderRadius: 10.0),
+                        iconData: Icons.shopping_cart,
+                        animationDuration: const Duration(milliseconds: 500),
+                        onTap: () {
+                          print('kassem');
+                          final _firestore = Firestore.instance;
+                          _firestore.collection('cart').add({
+                            'email': me,
+                            'title': MainsScreen.book[ind]['title'],
+                          });
+                        },
+                        iconSize: 30,
                       ),
-                        finalTextStyle: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black,
-                        ),
-                        borderRadius: 10.0
-                      ),
-                      iconData: Icons.shopping_cart,
-
-                      animationDuration:const Duration(seconds: 1),
-                      onTap: (){
-                        print('kassem');
-                        final _firestore = Firestore.instance;
-                        _firestore.collection('cart').add({
-                          'email': me,
-                          'title': MainsScreen.book[ind]['title'],
-                        });
-                      },
-                      iconSize: 30,
-
-
                     ),
                   ),
                 )
@@ -335,16 +355,16 @@ class searchable extends StatelessWidget {
             ),
             itemExtent: 60,
           ),
-
-          SliverFixedExtentList(delegate: SliverChildListDelegate([
-            Container(
-              height: 60.0,
-              color: Colors.white,
-            )
-          ]), itemExtent: 60.0)
+          SliverFixedExtentList(
+              delegate: SliverChildListDelegate([
+                Container(
+                  height: 60.0,
+                  color: Colors.white,
+                )
+              ]),
+              itemExtent: 60.0)
         ],
       ),
     );
   }
 }
-

@@ -29,17 +29,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Center(
-            child: Text(
-              'Dar',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
@@ -69,10 +58,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                 ],
               ),
-              Container(),
-              SizedBox(
-                height: 48.0,
-              ),
+
               TextField(
                 keyboardType: TextInputType.emailAddress,
                 textAlign: TextAlign.center,
@@ -93,23 +79,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   },
                   decoration: KTextFieldImputDecoration.copyWith(
                       hintText: 'Enter Your Password')),
-              SizedBox(
-                height: 24.0,
-              ),
+
               RoundedButton(
                 colour: Colors.blueAccent,
                 title: 'LogIn',
                 onPressed: () async {
-//                  try {
-//                    final user = await _auth.signInWithEmailAndPassword(
-//                        email: email, password: password);
-//                    if (user != null) {
-//                      Navigator.pushNamed(context, MainsScreen.id);
-//                    }
-//                  } catch (e) {
-//                    print(e);
-//                  }
-                  Navigator.pushNamed(context, MainsScreen.id);
+                  try {
+                    final user = await _auth.signInWithEmailAndPassword(
+                        email: email, password: password);
+                    if (user != null) {
+                      Navigator.pushNamed(context, MainsScreen.id);
+                    }
+                  } catch (e) {
+                    print(e);
+                  }
+//                  Navigator.pushNamed(context, MainsScreen.id);
                 },
               )
             ],
