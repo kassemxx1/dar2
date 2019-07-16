@@ -8,6 +8,8 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:material_search/material_search.dart';
 import 'package:progress_indicator_button/progress_button.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'AnimatedButton.dart';
+
 final _firestore = Firestore.instance;
 String SCategori;
 var allbook =[];
@@ -289,32 +291,57 @@ class searchable extends StatelessWidget {
           SliverFixedExtentList(
             delegate: SliverChildListDelegate(
               [
-                Container(
-                  width: 200,
-                  height: 60,
-                  child: ProgressButton(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    child: Text(
-                      "Add to Car",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
+                Center(
+                  child: Container(
+                    padding: EdgeInsets.all(0),
+                    color: Colors.white,
+                    child: AnimatedButton(
+                      initialText: 'Add To Cart',
+                      finalText: 'Added',
+
+                      buttonStyle: ButtonStyle(
+                        primaryColor: Colors.blue,
+                        secondaryColor: Colors.grey,
+                        elevation: 20.0,
+                        initialTextStyle: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+
                       ),
+                        finalTextStyle: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.black,
+                        ),
+                        borderRadius: 10.0
+                      ),
+                      iconData: Icons.shopping_cart,
+
+                      animationDuration:const Duration(seconds: 1),
+                      onTap: (){
+                        print('kassem');
+                        final _firestore = Firestore.instance;
+                        _firestore.collection('cart').add({
+                          'email': me,
+                          'title': MainsScreen.book[ind]['title'],
+                        });
+                      },
+                      iconSize: 30,
+
+
                     ),
-                    onPressed: (controller) {
-                      controller.forward();
-                      final _firestore = Firestore.instance;
-                      _firestore.collection('cart').add({
-                        'email': me,
-                        'title': MainsScreen.book[ind]['title'],
-                      });
-                    },
                   ),
-                ),
+                )
               ],
             ),
             itemExtent: 60,
           ),
+
+          SliverFixedExtentList(delegate: SliverChildListDelegate([
+            Container(
+              height: 60.0,
+              color: Colors.white,
+            )
+          ]), itemExtent: 60.0)
         ],
       ),
     );
