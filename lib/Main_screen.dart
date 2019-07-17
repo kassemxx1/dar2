@@ -7,13 +7,14 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:material_search/material_search.dart';
 import 'AnimatedButton.dart';
 
+
 final _firestore = Firestore.instance;
 String SCategori;
 var allbook = [];
 List<String> SearchBook = [];
 var i = 0;
 String _selected;
-
+var theCart = [];
 class MainsScreen extends StatefulWidget {
   static const String id = 'Main_Screen';
   static final book = [];
@@ -23,7 +24,14 @@ class MainsScreen extends StatefulWidget {
 }
 
 class _MainsScreenState extends State<MainsScreen> {
-  //RETRIEVE ALL BOOK FROM FIREBAS
+
+  void OnRefresh()async{
+    setState(() {
+      getCart();
+    });
+  }
+
+  //RETRIEVE ALL BOOK FROM FIREBASE
   void getallBook() async {
     allbook.clear();
     SearchBook.clear();
@@ -45,6 +53,26 @@ class _MainsScreenState extends State<MainsScreen> {
       SearchBook.add(title);
     }
   }
+  void getCart() async {
+    theCart.clear();
+    final messages = await _firestore
+        .collection('cart')
+        .where('email', isEqualTo: '')
+        .getDocuments();
+    for (var message in messages.documents) {
+      final title = message.data['title'].toString();
+      final imagename = message.data['imagelink'].toString();
+      final price = message.data['price'].toString();
+      final writer = message.data['writer'].toString();
+      theCart.add({
+        'title':title,
+        'imagelink': imagename,
+        'price': price,
+        'writer':writer,
+      });
+    }
+  }
+
 
   @override
   void initState() {
@@ -52,6 +80,7 @@ class _MainsScreenState extends State<MainsScreen> {
     super.initState();
     i = 0;
     getallBook();
+    getCart();
   }
 //SCAFOLD
   @override
@@ -204,6 +233,7 @@ class products extends StatelessWidget {
 
 
           }
+
           _selected = selected;
           for (int i = 0; i < allbook.length; i++) {
             var j = allbook[i]['title'];
@@ -222,6 +252,59 @@ class products extends StatelessWidget {
             )).toList(),
       );
     }
+    if(i==2){
+
+      print(theCart);
+      print(me);
+
+      return RefreshIndicator(
+        onRefresh: ()async{
+          allbook.clear();
+          SearchBook.clear();
+          final messages = await _firestore.collection('books').getDocuments();
+          for (var message in messages.documents) {
+            final title = message.data['title'].toString();
+            final imagename = message.data['imagename'].toString();
+            final price = message.data['price'].toString();
+            final detail = message.data['detail'].toString();
+            final writer = message.data['writer'].toString();
+
+            allbook.add({
+              'title': title,
+              'imagelink': imagename,
+              'price': price,
+              'detail': detail,
+              'writer':writer,
+            });
+            SearchBook.add(title);
+          }
+
+        },
+        child: ListView.builder(
+
+
+          itemCount: theCart.length+1,
+
+            itemBuilder: (context,index) {
+              if (index < theCart.length) {
+                return Container(child: ListTile(leading: CachedNetworkImage(
+                    imageUrl: theCart[index]['imagelink']),
+                  title: Text(theCart[index]['title']),));
+              }
+              else {
+                
+                return MaterialButton(onPressed: (){
+                  
+                },
+                child: Text('BUY'),
+                );
+              }
+            }  ),
+      );
+      
+
+    }
+
   }
 }
 //SEARCHABLE
@@ -344,7 +427,19 @@ class searchable extends StatelessWidget {
                           _firestore.collection('cart').add({
                             'email': me,
                             'title': MainsScreen.book[ind]['title'],
+                            'price':MainsScreen.book[ind]['price'],
+                            'imagelink':MainsScreen.book[ind]['imagelink'],
+                            'writer':MainsScreen.book[ind]['writer'],
                           });
+                          theCart.add({
+                            'email': me,
+                            'title': MainsScreen.book[ind]['title'],
+                            'price':MainsScreen.book[ind]['price'],
+                            'imagelink':MainsScreen.book[ind]['imagelink'],
+                            'writer':MainsScreen.book[ind]['writer'],
+                          });
+
+
                         },
                         iconSize: 30,
                       ),
@@ -368,3 +463,4 @@ class searchable extends StatelessWidget {
     );
   }
 }
+
