@@ -3,6 +3,7 @@ import 'package:dar/Welcome_Screen.dart';
 import 'Main_screen.dart';
 import 'Books_screen.dart';
 import 'package:dar/Swiper_Screen.dart';
+import 'basket_Screen.dart';
 void main() => runApp(Dar());
 
 class Dar extends StatelessWidget {
@@ -15,6 +16,7 @@ class Dar extends StatelessWidget {
           MainsScreen.id : (context) => MainsScreen(),
           BooksScreen.id :(context) => BooksScreen(),
           carddd.id : (context) => carddd(),
+          BasketScreen.id : (context) => BasketScreen(),
 
         }
     );

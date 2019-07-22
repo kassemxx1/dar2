@@ -6,14 +6,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:progress_indicator_button/progress_button.dart';
-
+final _auth = FirebaseAuth.instance;
 String imagelinkk;
 AnimationController controller;
 int indexx;
 String Pricee;
 DragStartBehavior dragStartBehavior;
-var me = "";
 
+FirebaseUser loggedInUser;
 Route route = MaterialPageRoute(builder: (context) => BooksScreen());
 double scalee = 1;
 
@@ -24,25 +24,25 @@ class BooksScreen extends StatefulWidget {
 }
 
 class _BooksScreenState extends State<BooksScreen> {
-  final _auth = FirebaseAuth.instance;
-  FirebaseUser loggedInUser;
-  void getCurrentUser() async {
-    try {
-      final user = await _auth.currentUser();
-      if (user != null) {
-        loggedInUser = user;
-        me = loggedInUser.email;
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+//  final _auth = FirebaseAuth.instance;
+//
+//  void getCurrentUser() async {
+//    try {
+//      final user = await _auth.currentUser();
+//      if (user != null) {
+//        loggedInUser = user;
+//        me = loggedInUser.email;
+//      }
+//    } catch (e) {
+//      print(e);
+//    }
+//  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getCurrentUser();
+
   }
 
   @override
