@@ -8,6 +8,10 @@ import 'package:material_search/material_search.dart';
 import 'AnimatedButton.dart';
 import 'basket_Screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'Search_Screen.dart';
+var items = List<String>();
+var all=[{}];
+var one=[{}];
 final _auth = FirebaseAuth.instance;
 final _firestore = Firestore.instance;
 String SCategori;
@@ -19,18 +23,16 @@ String _selected;
 class MainsScreen extends StatefulWidget {
   static const String id = 'Main_Screen';
   static final book = [];
-  static var me ;
+  static var me;
   @override
   _MainsScreenState createState() => _MainsScreenState();
 }
 
 class _MainsScreenState extends State<MainsScreen> {
-
-  void OnRefresh()async{
-    setState(() {
-
-    });
+  void OnRefresh() async {
+    setState(() {});
   }
+
   void getCurrentUser() async {
     try {
       final user = await _auth.currentUser();
@@ -60,13 +62,11 @@ class _MainsScreenState extends State<MainsScreen> {
         'imagelink': imagename,
         'price': price,
         'detail': detail,
-        'writer':writer,
+        'writer': writer,
       });
       SearchBook.add(title);
     }
   }
-
-
 
   @override
   void initState() {
@@ -76,14 +76,15 @@ class _MainsScreenState extends State<MainsScreen> {
     getallBook();
     getCurrentUser();
   }
+
 //SCAFOLD
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed:(){
-        Navigator.pushNamed(context, BasketScreen.id);
-        
-      },
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, BasketScreen.id);
+        },
         child: Text('basket'),
       ),
       appBar: AppBar(
@@ -111,8 +112,10 @@ class _MainsScreenState extends State<MainsScreen> {
             children: <Widget>[Icon(Icons.search, size: 30), Text('Search')],
           ),
           Column(
-            children: <Widget>[ Icon(Icons.shopping_cart, size: 30),Text('Cart')],
-
+            children: <Widget>[
+              Icon(Icons.shopping_cart, size: 30),
+              Text('Cart')
+            ],
           ),
         ],
         onTap: (index) {
@@ -126,6 +129,7 @@ class _MainsScreenState extends State<MainsScreen> {
     );
   }
 }
+
 //CARDCAT WITH RETRIEVE CATEGORIES
 class CardCat extends StatelessWidget {
   CardCat(
@@ -173,6 +177,7 @@ class CardCat extends StatelessWidget {
     );
   }
 }
+
 //PRODUCTS
 class products extends StatelessWidget {
   Widget addAppBar(int k) {
@@ -190,7 +195,6 @@ class products extends StatelessWidget {
         ),
       );
     }
-    ;
     if (k == 1) {
       AppBar(
         automaticallyImplyLeading: false,
@@ -224,43 +228,40 @@ class products extends StatelessWidget {
       );
     }
     if (i == 1) {
-      return MaterialSearchInput<String>(
+//      return MaterialSearchInput<String>(
+//        placeholder: 'Search',
+//        onSelect: (String selected) {
+//          if (selected == null) {
+//            //user closed the MaterialSearch without selecting any value
+//
+//          }
+//
+//          _selected = selected;
+//          for (int i = 0; i < allbook.length; i++) {
+//            var j = allbook[i]['title'];
+//            if (j == _selected) {
+//              Navigator.of(context).push(TransparentRoute(
+//                  builder: (BuildContext context) => searchable(i)));
+//            }
+//          }
+//        },
+//        results: SearchBook.map((name) => new MaterialSearchResult<String>(
+//              value: name, //The value must be of type <String>
+//              text: name, //String that will be show in the list
+//
+//              icon: Icons.book,
+//            )).toList(),
+//      );
+    return SearchScreen();
+    }
+    if (i == 2) {
+      return Container(
 
-        placeholder: 'Search',
-        onSelect: (String selected) {
-          if (selected == null) {
-            //user closed the MaterialSearch without selecting any value
-
-
-          }
-
-          _selected = selected;
-          for (int i = 0; i < allbook.length; i++) {
-            var j = allbook[i]['title'];
-            if (j == _selected) {
-              Navigator.of(context).push(TransparentRoute(
-                  builder: (BuildContext context) => searchable(i)));
-            }
-          }
-        },
-        results: SearchBook.map((name) => new MaterialSearchResult<String>(
-
-              value: name, //The value must be of type <String>
-              text: name, //String that will be show in the list
-
-              icon: Icons.book,
-            )).toList(),
       );
     }
-    if(i==2){
-
-
-      Navigator.pushNamed(context, BasketScreen.id);
-
-    }
-
   }
 }
+
 //SEARCHABLE
 class searchable extends StatelessWidget {
   int ind;
@@ -298,8 +299,8 @@ class searchable extends StatelessWidget {
             delegate: SliverChildListDelegate(
               [
                 Material(
-                  child: Text('  US \$ ${allbook[ind]['price']}',
-
+                  child: Text(
+                    '  US \$ ${allbook[ind]['price']}',
                     style: TextStyle(
                       color: Colors.green,
                       fontSize: 40.0,
@@ -316,8 +317,8 @@ class searchable extends StatelessWidget {
             delegate: SliverChildListDelegate(
               [
                 Material(
-                  child: Text(allbook[ind]['writer'],
-
+                  child: Text(
+                    allbook[ind]['writer'],
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 40.0,
@@ -353,10 +354,9 @@ class searchable extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(0.0),
                   child: Container(
-
                     color: Colors.white,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 40.0,right: 40.0),
+                      padding: const EdgeInsets.only(left: 40.0, right: 40.0),
                       child: AnimatedButton(
                         initialText: 'Add To Cart',
                         finalText: 'Added',
@@ -381,11 +381,10 @@ class searchable extends StatelessWidget {
                           _firestore.collection('cart').add({
                             'email': MainsScreen.me,
                             'title': MainsScreen.book[ind]['title'],
-                            'price':MainsScreen.book[ind]['price'],
-                            'imagelink':MainsScreen.book[ind]['imagelink'],
-                            'writer':MainsScreen.book[ind]['writer'],
+                            'price': MainsScreen.book[ind]['price'],
+                            'imagelink': MainsScreen.book[ind]['imagelink'],
+                            'writer': MainsScreen.book[ind]['writer'],
                           });
-
                         },
                         iconSize: 30,
                       ),
@@ -409,4 +408,6 @@ class searchable extends StatelessWidget {
     );
   }
 }
+
+
 

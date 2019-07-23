@@ -5,7 +5,8 @@ import 'Main_screen.dart';
 
 final _firestore = Firestore.instance;
 var theCart = [];
-
+var prices=[];
+var Sum=0;
 class BasketScreen extends StatefulWidget {
   static const String id = 'Basket_Screen';
   @override
@@ -16,6 +17,7 @@ class _BasketScreenState extends State<BasketScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Center(
@@ -46,7 +48,7 @@ class MsgStream extends StatelessWidget {
         for (var msg in snapshot.data.documents) {
           final title = msg['title'].toString();
           final imagename = msg.data['imagelink'].toString();
-          final price = msg.data['price'].toString();
+          final price = msg.data['price'];
           final writer = msg.data['writer'].toString();
           theCart.add({
             'title': title,
@@ -54,20 +56,39 @@ class MsgStream extends StatelessWidget {
             'price': price,
             'writer': writer,
           });
+          final theprice=int.parse(price);
+          prices.add(theprice);
         }
+        Sum=0;
+        for (num e in prices) {
+          Sum += e;
+        }
+
         return ListView.builder(
-            itemCount: theCart.length + 1,
+            itemCount: theCart.length+1,
             itemBuilder: (context, index) {
               if (index < theCart.length) {
                 return Container(
                     child: ListTile(
                   leading:
                       CachedNetworkImage(imageUrl: theCart[index]['imagelink']),
-                  title: Text(theCart[index]['title']),
+                  title: Text(
+                    theCart[index]['title'],
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    '${theCart[index]['price']} \$',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                    ),
+                  ),
                 ));
               } else {
                 return MaterialButton(
                   onPressed: () async {
+                    prices.clear();
                     theCart.clear();
                     final messages = await _firestore
                         .collection('cart')
@@ -78,7 +99,13 @@ class MsgStream extends StatelessWidget {
                       _firestore.collection('cart').document(id).delete();
                     }
                   },
-                  child: Text('BUY'),
+                  child: Row(
+                    children: <Widget>[
+                      Text('BUY'),
+                      Text('$Sum')
+
+                    ],
+                  ),
                 );
               }
             });
