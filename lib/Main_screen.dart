@@ -9,9 +9,10 @@ import 'AnimatedButton.dart';
 import 'basket_Screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'Search_Screen.dart';
+
 var items = List<String>();
-var all=[{}];
-var one=[{}];
+var all = [{}];
+var one = [{}];
 final _auth = FirebaseAuth.instance;
 final _firestore = Firestore.instance;
 String SCategori;
@@ -29,10 +30,6 @@ class MainsScreen extends StatefulWidget {
 }
 
 class _MainsScreenState extends State<MainsScreen> {
-  void OnRefresh() async {
-    setState(() {});
-  }
-
   void getCurrentUser() async {
     try {
       final user = await _auth.currentUser();
@@ -81,14 +78,22 @@ class _MainsScreenState extends State<MainsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, BasketScreen.id);
-        },
-        child: Text('basket'),
-      ),
+//      floatingActionButton: FloatingActionButton(
+//        onPressed: () {
+//          Navigator.pushNamed(context, BasketScreen.id);
+//        },
+//        child: Text('basket'),
+//      ),
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              _auth.signOut();
+              Navigator.pop(context);
+            },
+          ),
+        ],
         title: Center(
           child: Text(
             'Dar',
@@ -97,6 +102,24 @@ class _MainsScreenState extends State<MainsScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
+        ),
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 100,
+            ),
+            Text(MainsScreen.me),
+            MaterialButton(
+              child: Text('about'),
+              onPressed: () {
+                setState(() {
+                  return BasketScreen();
+                });
+              },
+            ),
+          ],
         ),
       ),
       body: products(),
@@ -180,37 +203,6 @@ class CardCat extends StatelessWidget {
 
 //PRODUCTS
 class products extends StatelessWidget {
-  Widget addAppBar(int k) {
-    if (k == 0) {
-      return AppBar(
-        automaticallyImplyLeading: false,
-        title: Center(
-          child: Text(
-            'Dar',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      );
-    }
-    if (k == 1) {
-      AppBar(
-        automaticallyImplyLeading: false,
-        title: Center(
-          child: Text(
-            'Dar',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     if (i == 0) {
@@ -252,12 +244,10 @@ class products extends StatelessWidget {
 //              icon: Icons.book,
 //            )).toList(),
 //      );
-    return SearchScreen();
+      return SearchScreen();
     }
     if (i == 2) {
-      return Container(
-
-      );
+      return BasketScreen();
     }
   }
 }
@@ -408,6 +398,3 @@ class searchable extends StatelessWidget {
     );
   }
 }
-
-
-

@@ -48,7 +48,12 @@ class _SearchScreenState extends State<SearchScreen> {
     }
 
   }
-
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SearchScreen.duplicateItems.add('');
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -94,39 +99,45 @@ class _getsubState extends State<getsub> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
       stream:_firestore.collection('books').snapshots(),
       builder: (context,snapshot){
-        SearchScreen.duplicateItems.clear();
-        for(var msg in snapshot.data.documents){
-          final name =msg['title'].toString();
-          final cat =msg['cat'].toString();
-          final price=msg['price'].toString();
-          final image = msg['imagename'].toString();
-          SearchScreen.duplicateItems.add(name);
-          all.add({
-            'title':name,
-            'price':price,
-            'image':image,
-          });
-        }
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            filterr(items[index]);
-            return ListTile(
-              title: Text('${SearchScreen.duplicateItems[index]}',style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),),
-              onTap: (){
-                Navigator.of(context).push(TransparentRoute(
-                  builder: (BuildContext context) => searchable(index)));
-              },
+
+        if(snapshot.hasData) {
+          final messages = snapshot.data.documents;
+          SearchScreen.duplicateItems.clear();
+          for (var msg in messages) {
+            final name = msg['title'].toString();
+            final cat = msg['cat'].toString();
+            final price = msg['price'].toString();
+            final image = msg['imagename'].toString();
+            SearchScreen.duplicateItems.add(name);
+            all.add({
+              'title': name,
+              'price': price,
+              'image': image,
+            });
+          }
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              filterr(items[index]);
+              return ListTile(
+                title: Text('${SearchScreen.duplicateItems[index]}',
+                  style: TextStyle(
+                      fontSize: 20.0, fontWeight: FontWeight.bold),),
+                onTap: () {
+                  Navigator.of(context).push(TransparentRoute(
+                      builder: (BuildContext context) => searchable(index)));
+                },
 
 //              leading: CachedNetworkImage(imageUrl: '${one[index]['image']}'),
-            );
-          },
-        );
-      },
+              );
+            },
+          );
+        }
+        },
     );
   }
 }

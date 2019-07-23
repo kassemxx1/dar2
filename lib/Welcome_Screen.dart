@@ -5,8 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'Main_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-
-
+import 'registration_screen.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+ProgressDialog pr;
 final _firestore = Firestore.instance;
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
@@ -18,6 +19,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final _auth = FirebaseAuth.instance;
   String email;
   String password;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -77,18 +79,32 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 colour: Colors.blueAccent,
                 title: 'LogIn',
                 onPressed: () async {
-//                  try {
-//                    final user = await _auth.signInWithEmailAndPassword(
-//                        email: email, password: password);
-//                    if (user != null) {
-//                      Navigator.pushNamed(context, MainsScreen.id);
-//                    }
-//                  } catch (e) {
-//                    print(e);
-//                  }
-                  Navigator.pushNamed(context, MainsScreen.id);
+                  pr.show();
+
+                  try {
+                    final user = await _auth.signInWithEmailAndPassword(
+                        email: email, password: password);
+
+                    if (user != null) {
+
+                      Navigator.pushNamed(context, MainsScreen.id);
+                      pr.hide();
+
+
+                    }
+                  } catch (e) {
+                    print(e);
+                  }
+ //                 Navigator.pushNamed(context, MainsScreen.id);
                 },
-              )
+              ),
+            MaterialButton(
+              child: Text('Create an account',style: TextStyle(fontSize: 20,color: Colors.grey),),
+              onPressed: (){
+                Navigator.pushNamed(context, RegistrationScreen.id);
+
+              },
+            )
             ],
           ),
         ),

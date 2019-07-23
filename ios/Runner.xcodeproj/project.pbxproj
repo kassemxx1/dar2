@@ -91,7 +91,6 @@
 				9BFB7325C22A57866E9928FE /* Pods-Runner.release.xcconfig */,
 				5EB242F6E12AA72EABAEE21F /* Pods-Runner.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -418,6 +417,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kassemabboud.dar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Profile;
@@ -544,6 +544,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kassemabboud.dar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -568,6 +569,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kassemabboud.dar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
