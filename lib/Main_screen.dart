@@ -89,8 +89,37 @@ class _MainsScreenState extends State<MainsScreen> {
           IconButton(
             icon: Icon(Icons.exit_to_app),
             onPressed: () {
-              _auth.signOut();
-              Navigator.pop(context);
+                // flutter defined function
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    // return object of type Dialog
+                    return AlertDialog(
+                      elevation: 10,
+                      title: new Text("Sign Out"),
+                      content: new Text("are you Sure!"),
+                      actions: <Widget>[
+                        // usually buttons at the bottom of the dialog
+                        new FlatButton(
+                          child: new Text("Close"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        new FlatButton(
+                            onPressed: (){
+                              _auth.signOut();
+                              Navigator.pushNamed(context, WelcomeScreen.id);
+                            },
+                            child: new Text("Ok"),
+                        ),
+
+                      ],
+                    );
+                  },
+                );
+
+
             },
           ),
         ],

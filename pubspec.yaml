@@ -18,10 +18,10 @@ dependencies:
   flutter_swiper: ^1.1.6
   progress_indicator_button: ^0.0.2
   curved_navigation_bar: ^0.3.0
-  loader_search_bar: ^1.0.3+3
   material_search: ^0.2.8
   progress_button: ^0.0.2
   progress_dialog: ^1.1.0+1
+
 
 dev_dependencies:
   flutter_test:

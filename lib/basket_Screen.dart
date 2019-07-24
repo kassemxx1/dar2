@@ -123,19 +123,28 @@ class MsgStream extends StatelessWidget {
                                 width: 200,
                                 child: MaterialButton(
                                     onPressed:()async {
-                                      prices.clear();
-                                      theCart.clear();
-                                      final messages = await _firestore
-                                          .collection('cart')
-                                          .where('email', isEqualTo: MainsScreen.me)
-                                          .getDocuments();
-                                      for (var i in messages.documents) {
-                                        final id = i.documentID;
-                                        _firestore.collection('cart').document(id).delete();
-                                      }
-                                      theCart.add({'title':'Your Cart Is Empty!'});
-                                    },
-                                    child: Text('Buy',style: TextStyle(fontSize: 26,color: Colors.white),),
+                                      AlertDialog(
+                                        elevation: 10,
+                                        title: new Text("Sign Out"),
+                                        content: new Text("are you Sure!"),
+                                        actions: <Widget>[
+                                          // usually buttons at the bottom of the dialog
+                                          new FlatButton(
+                                            child: new Text("Close"),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          new FlatButton(
+                                            onPressed: (){
+
+                                            },
+                                            child: new Text("Ok"),
+                                          ),
+
+                                        ],
+                                      );
+
 
                                 ),
                               ),
