@@ -319,13 +319,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.2"
-  progress_dialog:
-    dependency: "direct main"
-    description:
-      name: progress_dialog
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0+1"
   progress_indicator_button:
     dependency: "direct main"
     description:
@@ -464,6 +457,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.3"
+  toast:
+    dependency: "direct main"
+    description:
+      name: toast
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.5"
   transformer_page_view:
     dependency: transitive
     description:
@@ -513,6 +513,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.14"
+  xs_progress_hud:
+    dependency: "direct main"
+    description:
+      name: xs_progress_hud
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   yaml:
     dependency: transitive
     description:

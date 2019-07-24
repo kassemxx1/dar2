@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'Books_screen.dart';
 import 'Main_screen.dart';
 final _firestore = Firestore.instance;
-var items = List<String>();
+
 var all=[{}];
 var one=[{}];
 
@@ -12,13 +12,12 @@ class SearchScreen extends StatefulWidget {
   static const String id = 'Search_Screen';
   static  String catt;
   static var duplicateItems = List<String>();
-
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  var itemm = List<String>();
+  var items = List<String>();
 
   String title;
 

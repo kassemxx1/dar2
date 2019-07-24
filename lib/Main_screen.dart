@@ -9,7 +9,8 @@ import 'AnimatedButton.dart';
 import 'basket_Screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'Search_Screen.dart';
-
+import 'package:xs_progress_hud/xs_progress_hud.dart';
+import 'package:toast/toast.dart';
 var items = List<String>();
 var all = [{}];
 var one = [{}];
@@ -24,7 +25,7 @@ String _selected;
 class MainsScreen extends StatefulWidget {
   static const String id = 'Main_Screen';
   static final book = [];
-  static var me;
+  static var me="";
   @override
   _MainsScreenState createState() => _MainsScreenState();
 }
@@ -69,6 +70,7 @@ class _MainsScreenState extends State<MainsScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     i = 0;
     getallBook();
     getCurrentUser();
@@ -107,9 +109,20 @@ class _MainsScreenState extends State<MainsScreen> {
                           },
                         ),
                         new FlatButton(
-                            onPressed: (){
-                              _auth.signOut();
-                              Navigator.pushNamed(context, WelcomeScreen.id);
+                            onPressed: () async{
+                              XsProgressHud.show(context);
+                              try {
+                                 await _auth.signOut();
+                                  XsProgressHud.hide();
+                                  Navigator.pushNamed(
+                                      context, WelcomeScreen.id);
+
+                              }
+                              catch(e){
+                                XsProgressHud.hide();
+                                Toast.show('$e', context, duration: Toast.LENGTH_SHORT, gravity:  Toast.CENTER);
+                              }
+
                             },
                             child: new Text("Ok"),
                         ),
@@ -139,7 +152,7 @@ class _MainsScreenState extends State<MainsScreen> {
             SizedBox(
               height: 100,
             ),
-            Text(MainsScreen.me),
+            Text('${MainsScreen.me}'),
             MaterialButton(
               child: Text('about'),
               onPressed: () {

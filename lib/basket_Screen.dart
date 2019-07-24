@@ -122,29 +122,49 @@ class MsgStream extends StatelessWidget {
                                 height: 50,
                                 width: 200,
                                 child: MaterialButton(
-                                    onPressed:()async {
-                                      AlertDialog(
-                                        elevation: 10,
-                                        title: new Text("Sign Out"),
-                                        content: new Text("are you Sure!"),
-                                        actions: <Widget>[
-                                          // usually buttons at the bottom of the dialog
-                                          new FlatButton(
-                                            child: new Text("Close"),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          new FlatButton(
-                                            onPressed: (){
+                                    onPressed:() {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          // return object of type Dialog
+                                          return AlertDialog(
+                                            elevation: 10,
+                                            title: new Text("Order Confirmation!"),
+                                            content: new Text("are you Sure?"),
+                                            actions: <Widget>[
+                                              // usually buttons at the bottom of the dialog
+                                              new FlatButton(
+                                                child: new Text("Back"),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                              new FlatButton (
+                                                onPressed: ()async{
+                                                  prices.clear();
+                                                  theCart.clear();
+                                                  final messages = await _firestore
+                                                      .collection('cart')
+                                                      .where('email', isEqualTo: MainsScreen.me)
+                                                      .getDocuments();
+                                                  for (var i in messages.documents) {
+                                                    final id = i.documentID;
+                                                    _firestore.collection('cart').document(id).delete();
+                                                  }
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: new Text("PAY NOW",style: TextStyle(color: Colors.white),),
+                                                color: Colors.blueAccent,
+                                              ),
 
-                                            },
-                                            child: new Text("Ok"),
-                                          ),
-
-                                        ],
+                                            ],
+                                          );
+                                        },
                                       );
 
+                                      theCart.add({'title':'Your Cart Is Empty!'});
+                                    },
+                                    child: Text('Buy',style: TextStyle(fontSize: 26,color: Colors.white),),
 
                                 ),
                               ),

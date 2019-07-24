@@ -3,8 +3,8 @@ import 'Rounded_Button.dart';
 import 'constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'Main_screen.dart';
-import 'package:progress_dialog/progress_dialog.dart';
-ProgressDialog pr;
+import 'package:xs_progress_hud/xs_progress_hud.dart';
+import 'package:toast/toast.dart';
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration_screen';
   @override
@@ -61,17 +61,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
             RoundedButton(colour: Colors.blueAccent,title: 'Register',
               onPressed: () async{
+                XsProgressHud.show(context);
 
               try {
                 final newUser = await _auth.createUserWithEmailAndPassword(
                     email: email, password: password);
                 if (newUser != null){
-
+                  XsProgressHud.hide();
                   Navigator.pushNamed(context,MainsScreen.id);
                 }
               }
               catch(e){
-                print(e);
+                Toast.show('$e', context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
               }
 
             },)

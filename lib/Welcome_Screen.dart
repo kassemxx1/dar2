@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:dar/Rounded_Button.dart';
 import 'package:dar/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'Main_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'registration_screen.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:xs_progress_hud/xs_progress_hud.dart';
+import 'package:toast/toast.dart';
 
 
-ProgressDialog pr;
 final _firestore = Firestore.instance;
 
 class WelcomeScreen extends StatefulWidget {
@@ -86,16 +85,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 colour: Colors.blueAccent,
                 title: 'LogIn',
                 onPressed: () async {
-
+                  XsProgressHud.show(context);
                   try {
                     final user = await _auth.signInWithEmailAndPassword(
                         email: email, password: password);
-
+                    XsProgressHud.hide();
                     if (user != null) {
                       Navigator.pushNamed(context, MainsScreen.id);
                     }
                   } catch (e) {
                     print(e);
+                    XsProgressHud.hide();
+                    Toast.show('${e.toString()}', context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
                   }
                   //                 Navigator.pushNamed(context, MainsScreen.id);
                 },
@@ -117,12 +118,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   void getdata() async {
+    WelcomeScreen.nnn.clear();
     final messages = await _firestore.collection('categories').getDocuments();
     for (var message in messages.documents) {
       final categorie = message.data['cat'].toString();
       final ImageLink = message.data['imagelink'].toString();
       WelcomeScreen.nnn.add({'cat': categorie, 'imagelink': ImageLink});
-      print(WelcomeScreen.nnn);
+
     }
   }
 }

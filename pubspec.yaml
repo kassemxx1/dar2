@@ -20,7 +20,8 @@ dependencies:
   curved_navigation_bar: ^0.3.0
   material_search: ^0.2.8
   progress_button: ^0.0.2
-  progress_dialog: ^1.1.0+1
+  xs_progress_hud: ^1.0.2
+  toast: ^0.1.5
 
 
 dev_dependencies:
