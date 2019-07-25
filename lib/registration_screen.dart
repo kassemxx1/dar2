@@ -72,7 +72,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 }
               }
               catch(e){
-                Toast.show('$e', context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+                XsProgressHud.hide();
+                Toast.show('$e', context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
               }
 
             },)

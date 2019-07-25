@@ -17,7 +17,7 @@ var one = [{}];
 final _auth = FirebaseAuth.instance;
 final _firestore = Firestore.instance;
 String SCategori;
-var allbook = [];
+
 List<String> SearchBook = [];
 var i = 0;
 String _selected;
@@ -44,27 +44,7 @@ class _MainsScreenState extends State<MainsScreen> {
   }
 
   //RETRIEVE ALL BOOK FROM FIREBASE
-  void getallBook() async {
-    allbook.clear();
-    SearchBook.clear();
-    final messages = await _firestore.collection('books').getDocuments();
-    for (var message in messages.documents) {
-      final title = message.data['title'].toString();
-      final imagename = message.data['imagename'].toString();
-      final price = message.data['price'].toString();
-      final detail = message.data['detail'].toString();
-      final writer = message.data['writer'].toString();
 
-      allbook.add({
-        'title': title,
-        'imagelink': imagename,
-        'price': price,
-        'detail': detail,
-        'writer': writer,
-      });
-      SearchBook.add(title);
-    }
-  }
 
   @override
   void initState() {
@@ -72,7 +52,7 @@ class _MainsScreenState extends State<MainsScreen> {
     super.initState();
 
     i = 0;
-    getallBook();
+   // getallBook();
     getCurrentUser();
   }
 
@@ -208,6 +188,8 @@ class CardCat extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: () async {
+
+
         MainsScreen.book.clear();
         final messages = await _firestore
             .collection('books')
@@ -236,7 +218,7 @@ class CardCat extends StatelessWidget {
 //              placeholder: new CircularProgressIndicator(),
 //              errorWidget: new Icon(Icons.error),
           ),
-          Text(cat),
+          Text(cat,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
         ],
       ),
     );
@@ -262,31 +244,32 @@ class products extends StatelessWidget {
       );
     }
     if (i == 1) {
-//      return MaterialSearchInput<String>(
-//        placeholder: 'Search',
-//        onSelect: (String selected) {
-//          if (selected == null) {
-//            //user closed the MaterialSearch without selecting any value
-//
-//          }
-//
-//          _selected = selected;
-//          for (int i = 0; i < allbook.length; i++) {
-//            var j = allbook[i]['title'];
-//            if (j == _selected) {
-//              Navigator.of(context).push(TransparentRoute(
-//                  builder: (BuildContext context) => searchable(i)));
-//            }
-//          }
-//        },
-//        results: SearchBook.map((name) => new MaterialSearchResult<String>(
-//              value: name, //The value must be of type <String>
-//              text: name, //String that will be show in the list
-//
-//              icon: Icons.book,
-//            )).toList(),
-//      );
+      return MaterialSearchInput<String>(
+        placeholder: 'Search',
+        onSelect: (String selected) {
+          if (selected == null) {
+            //user closed the MaterialSearch without selecting any value
+
+          }
+
+          _selected = selected;
+          for (int i = 0; i < WelcomeScreen.allbook.length; i++) {
+            var j = WelcomeScreen.allbook[i]['title'];
+            if (j == _selected) {
+              Navigator.of(context).push(TransparentRoute(
+                  builder: (BuildContext context) => searchable(i)));
+            }
+          }
+        },
+        results: SearchBook.map((name) => new MaterialSearchResult<String>(
+              value: name, //The value must be of type <String>
+              text: name, //String that will be show in the list
+
+              icon: Icons.book,
+            )).toList(),
+      );
       return SearchScreen();
+
     }
     if (i == 2) {
       return BasketScreen();
@@ -311,13 +294,13 @@ class searchable extends StatelessWidget {
               background: Stack(
                 children: <Widget>[
                   CachedNetworkImage(
-                    imageUrl: allbook[ind]['imagelink'],
+                    imageUrl: WelcomeScreen.allbook[ind]['imagelink'],
                     fit: BoxFit.fill,
                   ),
                 ],
               ),
               title: Text(
-                allbook[ind]['title'],
+                WelcomeScreen.allbook[ind]['title'],
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -332,7 +315,7 @@ class searchable extends StatelessWidget {
               [
                 Material(
                   child: Text(
-                    '  US \$ ${allbook[ind]['price']}',
+                    '  US \$ ${WelcomeScreen.allbook[ind]['price']}',
                     style: TextStyle(
                       color: Colors.green,
                       fontSize: 40.0,
@@ -350,7 +333,7 @@ class searchable extends StatelessWidget {
               [
                 Material(
                   child: Text(
-                    allbook[ind]['writer'],
+                    WelcomeScreen.allbook[ind]['writer'],
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 40.0,
@@ -368,7 +351,7 @@ class searchable extends StatelessWidget {
               [
                 Material(
                   child: Text(
-                    allbook[ind]['detail'],
+                    WelcomeScreen.allbook[ind]['detail'],
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20.0,
@@ -412,10 +395,10 @@ class searchable extends StatelessWidget {
                           final _firestore = Firestore.instance;
                           _firestore.collection('cart').add({
                             'email': MainsScreen.me,
-                            'title': MainsScreen.book[ind]['title'],
-                            'price': MainsScreen.book[ind]['price'],
-                            'imagelink': MainsScreen.book[ind]['imagelink'],
-                            'writer': MainsScreen.book[ind]['writer'],
+                            'title': WelcomeScreen.allbook[ind]['title'],
+                            'price': WelcomeScreen.allbook[ind]['price'],
+                            'imagelink': WelcomeScreen.allbook[ind]['imagelink'],
+                            'writer': WelcomeScreen.allbook[ind]['writer'],
                           });
                         },
                         iconSize: 30,

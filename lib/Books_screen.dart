@@ -127,7 +127,7 @@ class CardBooks extends StatelessWidget {
         Center(
           child: Column(
             children: <Widget>[
-              Center(child: Text('$cat  ')),
+              Center(child: Text('$cat  ',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold))),
               SizedBox(
                 height: 10.0,
               ),
@@ -137,6 +137,8 @@ class CardBooks extends StatelessWidget {
                   textAlign: TextAlign.end,
                   style: TextStyle(
                     color: Colors.green,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),

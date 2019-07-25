@@ -15,6 +15,7 @@ final _firestore = Firestore.instance;
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
   static final nnn = [];
+ static var allbook = [];
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -23,10 +24,31 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final _auth = FirebaseAuth.instance;
   String email;
   String password;
+  void getallBookk() async {
+    WelcomeScreen.allbook.clear();
+    SearchBook.clear();
+    final messages = await _firestore.collection('books').getDocuments();
+    for (var message in messages.documents) {
+      final title = message.data['title'].toString();
+      final imagename = message.data['imagename'].toString();
+      final price = message.data['price'].toString();
+      final detail = message.data['detail'].toString();
+      final writer = message.data['writer'].toString();
+
+      WelcomeScreen.allbook.add({
+        'title': title,
+        'imagelink': imagename,
+        'price': price,
+        'detail': detail,
+        'writer': writer,
+      });
+      SearchBook.add(title);
+    }
+  }
 
   @override
   void initState() {
-
+    getallBookk();
     // TODO: implement initState
     getdata();
 
@@ -85,20 +107,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 colour: Colors.blueAccent,
                 title: 'LogIn',
                 onPressed: () async {
-                  XsProgressHud.show(context);
-                  try {
-                    final user = await _auth.signInWithEmailAndPassword(
-                        email: email, password: password);
-                    XsProgressHud.hide();
-                    if (user != null) {
-                      Navigator.pushNamed(context, MainsScreen.id);
-                    }
-                  } catch (e) {
-                    print(e);
-                    XsProgressHud.hide();
-                    Toast.show('${e.toString()}', context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
-                  }
-                  //                 Navigator.pushNamed(context, MainsScreen.id);
+//                  XsProgressHud.show(context);
+//                  try {
+//                    final user = await _auth.signInWithEmailAndPassword(
+//                        email: email, password: password);
+//                    XsProgressHud.hide();
+//                    if (user != null) {
+//                      Navigator.pushNamed(context, MainsScreen.id);
+//                    }
+//                  } catch (e) {
+//                    print(e);
+//                    XsProgressHud.hide();
+//                    Toast.show('${e.toString()}', context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+//                  }
+                                   Navigator.pushNamed(context, MainsScreen.id);
                 },
               ),
               MaterialButton(

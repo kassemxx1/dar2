@@ -78,29 +78,35 @@ class MsgStream extends StatelessWidget {
         }
 
         return ListView.builder(
+
             itemCount: theCart.length+1,
             itemBuilder: (context, index) {
               if (index < theCart.length) {
-                return Container(
-                    child: ListTile(
-                  leading:
-                      CachedNetworkImage(imageUrl: theCart[index]['imagelink']),
-                  title: Text(
-                    theCart[index]['title'],
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                    '${theCart[index]['price']} \$',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
+                return Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Container(
+                    color: Colors.grey[300],
+                      child: ListTile(
+                    leading:
+                        CachedNetworkImage(imageUrl: theCart[index]['imagelink']),
+                    title: Text(
+                      theCart[index]['title'],
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                ));
+                    subtitle: Text(
+                      '${theCart[index]['price']} \$',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                  )),
+                );
               } else {
                 return  Container(
-                    height: 50,
+//                  decoration: BoxDecoration(border: new Border.all(color: Colors.grey)),
+                    height: 60,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: Row(
