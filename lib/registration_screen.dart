@@ -30,7 +30,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
 
-                  child: Image.asset('images/logo.png'),
+                  child: Image.asset('images/cat_img.png'),
                 ),
               ),
             ),

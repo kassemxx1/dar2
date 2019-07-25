@@ -8,9 +8,9 @@ import 'package:material_search/material_search.dart';
 import 'AnimatedButton.dart';
 import 'basket_Screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'Search_Screen.dart';
 import 'package:xs_progress_hud/xs_progress_hud.dart';
 import 'package:toast/toast.dart';
+import 'package:dar/Rounded_Button.dart';
 var items = List<String>();
 var all = [{}];
 var one = [{}];
@@ -126,22 +126,90 @@ class _MainsScreenState extends State<MainsScreen> {
           ),
         ),
       ),
-      drawer: Drawer(
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 100,
-            ),
-            Text('${MainsScreen.me}'),
-            MaterialButton(
-              child: Text('about'),
-              onPressed: () {
-                setState(() {
-                  return BasketScreen();
-                });
-              },
-            ),
-          ],
+      drawer: Container(
+        width: MediaQuery.of(context).size.width/1.6,
+        height: MediaQuery.of(context).size.height-30,
+        child: Drawer(
+          elevation: 20,
+          child: Column(
+            children: <Widget>[
+              Container(
+                color: Colors.white,
+                  height: 150,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset('images/cat_img.png',fit: BoxFit.fill,),
+                  ),
+
+              ),
+
+              Column(
+                children: <Widget>[
+                  Text('Your Email:',style: TextStyle(fontSize: 20),),
+                  Text('${MainsScreen.me}',style: TextStyle(fontSize: 20),),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: RoundedButton(
+                  title: 'SignOut',
+                  colour: Colors.blueAccent,
+                  onPressed: (){
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        // return object of type Dialog
+                        return AlertDialog(
+                          elevation: 10,
+                          title: new Text("Sign Out"),
+                          content: new Text("are you Sure!"),
+                          actions: <Widget>[
+                            // usually buttons at the bottom of the dialog
+                            new FlatButton(
+                              child: new Text("Close"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            new FlatButton(
+                              onPressed: () async{
+                                XsProgressHud.show(context);
+                                try {
+                                  await _auth.signOut();
+                                  XsProgressHud.hide();
+                                  Navigator.pushNamed(
+                                      context, WelcomeScreen.id);
+
+                                }
+                                catch(e){
+                                  XsProgressHud.hide();
+                                  Toast.show('$e', context, duration: Toast.LENGTH_SHORT, gravity:  Toast.CENTER);
+                                }
+
+                              },
+                              child: new Text("Ok"),
+                            ),
+
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: RoundedButton(
+                  title: 'About',
+                  colour: Colors.blueAccent,
+                  onPressed: (){
+
+                },
+                ),
+              ),
+
+            ],
+          ),
         ),
       ),
       body: products(),
@@ -188,28 +256,36 @@ class CardCat extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: () async {
+        XsProgressHud.show(context);
+        try{
+          MainsScreen.book.clear();
+          final messages = await _firestore
+              .collection('books')
+              .where('cat', isEqualTo: cat)
+              .getDocuments();
+          for (var message in messages.documents) {
+            final title = message.data['title'].toString();
+            final imagename = message.data['imagename'].toString();
+            final price = message.data['price'].toString();
+            final detail = message.data['detail'].toString();
 
-
-        MainsScreen.book.clear();
-        final messages = await _firestore
-            .collection('books')
-            .where('cat', isEqualTo: cat)
-            .getDocuments();
-        for (var message in messages.documents) {
-          final title = message.data['title'].toString();
-          final imagename = message.data['imagename'].toString();
-          final price = message.data['price'].toString();
-          final detail = message.data['detail'].toString();
-
-          MainsScreen.book.add({
-            'title': title,
-            'imagelink': imagename,
-            'price': price,
-            'detail': detail
-          });
+            MainsScreen.book.add({
+              'title': title,
+              'imagelink': imagename,
+              'price': price,
+              'detail': detail
+            });
+          }
+          XsProgressHud.hide();
+          Navigator.pushNamed(context, BooksScreen.id);
+        }
+        catch(e){
+          XsProgressHud.hide();
+          Toast.show('${e.toString()}', context,
+              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         }
 
-        Navigator.pushNamed(context, BooksScreen.id);
+
       },
       child: Column(
         children: <Widget>[
@@ -268,7 +344,6 @@ class products extends StatelessWidget {
               icon: Icons.book,
             )).toList(),
       );
-      return SearchScreen();
 
     }
     if (i == 2) {

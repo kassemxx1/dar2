@@ -9,13 +9,12 @@ import 'registration_screen.dart';
 import 'package:xs_progress_hud/xs_progress_hud.dart';
 import 'package:toast/toast.dart';
 
-
 final _firestore = Firestore.instance;
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
   static final nnn = [];
- static var allbook = [];
+  static var allbook = [];
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -51,7 +50,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     getallBookk();
     // TODO: implement initState
     getdata();
-
   }
 
   @override
@@ -65,23 +63,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    child: Image.asset('images/b.png'),
-                    height: 60.0,
-                  ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  TypewriterAnimatedTextKit(
-                      text: ['دار النشر'],
-                      textStyle: TextStyle(
-                        fontSize: 45.0,
-                      ),
-                      textAlign: TextAlign.right),
-                ],
+              Flexible(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      child: Image.asset('images/b.png'),
+                      height: 60.0,
+                    ),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    TypewriterAnimatedTextKit(
+                        text: ['دار النشر'],
+                        textStyle: TextStyle(
+                          fontSize: 45.0,
+                        ),
+                        textAlign: TextAlign.right),
+                  ],
+                ),
               ),
               TextField(
                 keyboardType: TextInputType.emailAddress,
@@ -107,30 +107,33 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 colour: Colors.blueAccent,
                 title: 'LogIn',
                 onPressed: () async {
-//                  XsProgressHud.show(context);
-//                  try {
-//                    final user = await _auth.signInWithEmailAndPassword(
-//                        email: email, password: password);
-//                    XsProgressHud.hide();
-//                    if (user != null) {
-//                      Navigator.pushNamed(context, MainsScreen.id);
-//                    }
-//                  } catch (e) {
-//                    print(e);
-//                    XsProgressHud.hide();
-//                    Toast.show('${e.toString()}', context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
-//                  }
-                                   Navigator.pushNamed(context, MainsScreen.id);
+                  XsProgressHud.show(context);
+                  try {
+                    final user = await _auth.signInWithEmailAndPassword(
+                        email: email, password: password);
+                    XsProgressHud.hide();
+                    if (user != null) {
+                      Navigator.pushNamed(context, MainsScreen.id);
+                    }
+                  } catch (e) {
+                    print(e);
+                    XsProgressHud.hide();
+                    Toast.show('${e.toString()}', context,
+                        duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+                  }
+//                                   Navigator.pushNamed(context, MainsScreen.id);
                 },
               ),
-              MaterialButton(
-                child: Text(
-                  'Create an account',
-                  style: TextStyle(fontSize: 20, color: Colors.grey),
+              Flexible(
+                child: MaterialButton(
+                  child: Text(
+                    'Create an account',
+                    style: TextStyle(fontSize: 20, color: Colors.grey),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, RegistrationScreen.id);
+                  },
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(context, RegistrationScreen.id);
-                },
               )
             ],
           ),
@@ -146,7 +149,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       final categorie = message.data['cat'].toString();
       final ImageLink = message.data['imagelink'].toString();
       WelcomeScreen.nnn.add({'cat': categorie, 'imagelink': ImageLink});
-
     }
   }
 }
